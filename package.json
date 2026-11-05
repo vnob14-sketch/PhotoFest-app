@@ -15,17 +15,16 @@
     "check": "node scripts/check.js",
     "dist": "electron-builder --win --x64 --publish never"
   },
-  "dependencies": {
-    "@supabase/supabase-js": "2.45.4",
-    "peerjs": "1.5.2"
-  },
   "devDependencies": {
+    "@supabase/supabase-js": "2.45.4",
+    "peerjs": "1.5.2",
     "electron": "^33.2.0",
     "electron-builder": "^25.1.8"
   },
   "build": {
     "appId": "app.thefest.photofest",
     "productName": "PhotoFest",
+    "npmRebuild": false,
     "directories": { "output": "dist", "buildResources": "build" },
     "files": ["main.js", "preload.js", "lib/**", "app/**", "package.json"],
     "win": {
