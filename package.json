@@ -1,0 +1,38 @@
+{
+  "name": "photofest-desktop",
+  "productName": "PhotoFest",
+  "version": "1.0.0",
+  "description": "PhotoFest Desktop: aplikasi photobooth Windows (kamera, printer, penyimpanan internal/folder/cloud) oleh TheFest Media Production",
+  "main": "main.js",
+  "private": true,
+  "author": "TheFest Media Production",
+  "scripts": {
+    "start": "electron .",
+    "assets": "node scripts/build-manifest.js",
+    "vendor": "node scripts/vendor.js",
+    "postinstall": "node scripts/unpack-assets.js && node scripts/vendor.js && node scripts/build-manifest.js",
+    "unpack": "node scripts/unpack-assets.js",
+    "check": "node scripts/check.js",
+    "dist": "electron-builder --win --x64 --publish never"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.45.4",
+    "peerjs": "1.5.2"
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "app.thefest.photofest",
+    "productName": "PhotoFest",
+    "directories": { "output": "dist", "buildResources": "build" },
+    "files": ["main.js", "preload.js", "lib/**", "app/**", "package.json"],
+    "win": {
+      "target": [{ "target": "nsis", "arch": ["x64"] }, { "target": "portable", "arch": ["x64"] }],
+      "icon": "build/icon.ico",
+      "artifactName": "PhotoFest-${version}-${target}.${ext}"
+    },
+    "nsis": { "oneClick": false, "allowToChangeInstallationDirectory": true, "createDesktopShortcut": true, "shortcutName": "PhotoFest" }
+  }
+}

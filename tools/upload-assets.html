@@ -1,0 +1,24 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Upload aset PhotoFest</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<style>body{font:16px system-ui;max-width:560px;margin:30px auto;padding:0 16px}input,button{display:block;width:100%;padding:10px;margin:6px 0 14px;font:inherit;box-sizing:border-box}button{background:#ebc520;border:2px solid #000;font-weight:700;cursor:pointer}#log{white-space:pre-wrap;font:14px monospace}</style></head><body>
+<h2>Upload aset PhotoFest</h2>
+<p>Halaman ini hanya dibuka di komputermu sendiri. Jangan diupload ke hosting.</p>
+<label>Project URL<input id="u" placeholder="https://abcd.supabase.co"></label>
+<label>service_role key (Project Settings &gt; API)<input id="k" type="password"></label>
+<label>Pilih folder <b>assets</b> (yang berisi manifest.json dan folder files)<input id="f" type="file" webkitdirectory></label>
+<button id="go">Mulai upload</button><div id="log"></div>
+<script>
+const $=s=>document.querySelector(s),log=t=>$('#log').textContent+=t+'\n';
+$('#go').onclick=async()=>{try{
+const fs=[...$('#f').files];if(!fs.length||!$('#u').value||!$('#k').value)return alert('Isi semua kolom dulu.');
+const sb=supabase.createClient($('#u').value.trim(),$('#k').value.trim()),by={};
+fs.forEach(f=>by[f.webkitRelativePath.split('/').slice(1).join('/')]=f);
+if(!by['manifest.json'])return alert('Yang dipilih harus folder assets.');
+const rows=JSON.parse(await by['manifest.json'].text());let n=0;
+for(const r of rows){const f=by['files/'+r.path];if(!f){log('HILANG: '+r.path);continue}
+const{error}=await sb.storage.from('assets').upload(r.path,f,{upsert:true,contentType:'image/webp',cacheControl:'31536000'});
+if(error){log('GAGAL '+r.path+': '+error.message);return}if(++n%10==0)log(n+'/'+rows.length)}
+const{error}=await sb.from('catalog').upsert(rows,{onConflict:'kind,key'});
+log(error?'GAGAL katalog: '+error.message:'SELESAI: '+n+' aset terupload.')}catch(e){log('Error: '+e.message)}};
+</script></body></html>
