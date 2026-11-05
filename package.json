@@ -2,7 +2,7 @@
   "name": "photofest-desktop",
   "productName": "PhotoFest",
   "version": "1.0.0",
-  "description": "PhotoFest Desktop: aplikasi photobooth Windows (kamera, printer, penyimpanan internal/folder/cloud) oleh TheFest Media Production",
+  "description": "PhotoFest Desktop: aplikasi photobooth Windows oleh TheFest Media Production",
   "main": "main.js",
   "private": true,
   "author": "TheFest Media Production",
@@ -27,7 +27,7 @@
     "npmRebuild": false,
     "directories": { "output": "dist", "buildResources": "build" },
     "files": ["main.js", "preload.js", "lib/**", "app/**", "package.json"],
-        "win": {
+    "win": {
       "target": [{ "target": "nsis", "arch": ["x64"] }, { "target": "portable", "arch": ["x64"] }],
       "icon": "build/icon.ico"
     },
@@ -41,3 +41,5 @@
     "portable": {
       "artifactName": "PhotoFest-Portable-${version}.${ext}"
     }
+  }
+}
